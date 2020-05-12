@@ -54,6 +54,8 @@ export const App = () => {
     }
   }
 
+  console.log(parks)
+
   return (
     <div className="inputs-container">
       <form>
@@ -96,7 +98,7 @@ export const App = () => {
         <ul>
           {parks.data.results.map(park => 
             <li key={park.id}>
-              {park.name} 
+              <a href={`https://www.google.com/maps/place/?q=place_id:${park.place_id}`} target="_blank">{park.name}</a>
               { park.vicinity &&  
               `, ${park.vicinity}`
               }
