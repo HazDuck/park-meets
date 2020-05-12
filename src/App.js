@@ -1,42 +1,48 @@
-//johnstone street bath royal cresent bath
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios'
 
 export const App = () => {
   const [ address1, setAddress1 ] = useState('')
   const [ address2, setAddress2 ] = useState('')
   const [ radius, setRadius ] = useState(200)
-  const [ coordinates, setCoordinates ] = useState({})
-  const [ centralLocation, setCentralLocation ] = useState({})
   const [ loading, setLoading ] = useState(false)
   const [ parks, setParks ] = useState({})
+  const [ errorMessage, setErrorMessage ] = useState('')
 
   const getCoordinates = async () => {
     setLoading(true)
     let apiResponse
     try {
-      apiResponse = await axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=”${address1}”&destination=”${address2}”&key=${process.env.REACT_APP_API_KEY}`)
-      setCoordinates({data: apiResponse.data, status: apiResponse.data.status})
-      setLoading(false)
+      await axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=”${address1}”&destination=”${address2}”&key=${process.env.REACT_APP_API_KEY}`)
+      .then(data => {
+        apiResponse = {data: data.data, status: data.data.status}
+        calculateCentralLocation(apiResponse)
+      })
     } 
     catch(error) {
-      setCoordinates({data: null, status: apiResponse && apiResponse.data && apiResponse.data.status ? apiResponse.data.status : 'fail'})
+      setErrorMessage(error)
+      setLoading(false)
     } 
   }
 
-  const calculateCentralLocation = () => {
-      setCentralLocation({
-        lat:(coordinates.data.routes[0].legs[0].end_location.lat + coordinates.data.routes[0].legs[0].start_location.lat)/2,
-        lng:(coordinates.data.routes[0].legs[0].end_location.lng + coordinates.data.routes[0].legs[0].start_location.lng)/2
-      })
-      if (centralLocation.lat !== undefined || centralLocation.lng !== undefined ) {
-        getParks()
+  const calculateCentralLocation = (apiResponse) => {
+    if (apiResponse.status !== "OK") {
+      setErrorMessage(apiResponse.status)
+      setLoading(false)
+    }
+
+    if (apiResponse && apiResponse.data && apiResponse.data.routes[0] && apiResponse.data.routes[0].legs[0]) {
+      let centralLocation = {
+        lat: (apiResponse.data.routes[0].legs[0].end_location.lat + apiResponse.data.routes[0].legs[0].start_location.lat)/2,
+        lng: (apiResponse.data.routes[0].legs[0].end_location.lng + apiResponse.data.routes[0].legs[0].start_location.lng)/2
       }
+      if (centralLocation.lat !== undefined && centralLocation.lng !== undefined ) {
+        getParks(centralLocation)
+      }
+    }
   }
 
-  const getParks = async () => {
-    setLoading(true)
+  const getParks = async (centralLocation) => {
     let apiResponse
     try {
       apiResponse = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${centralLocation.lat},${centralLocation.lng}&radius=${radius}&type=park&key=${process.env.REACT_APP_API_KEY}`)
@@ -44,14 +50,9 @@ export const App = () => {
       setLoading(false)
     } 
     catch(error) {
-      setCoordinates({data: null, status: apiResponse && apiResponse.data && apiResponse.data.status ? apiResponse.data.status : 'fail'})
+      console.log(error)
     }
   }
-
-  useEffect(() => {
-    if (coordinates.status !== "OK") return
-    calculateCentralLocation()
-  }, [coordinates])
 
   return (
     <div className="inputs-container">
@@ -76,13 +77,20 @@ export const App = () => {
         ></input>
         <button
         type="button"
-        onClick={() => getCoordinates()}
-        onKeyDown={() => getCoordinates()}
+        onClick={() => {
+          getCoordinates()
+          setErrorMessage('')
+        }}
+        onKeyDown={() => {
+          getCoordinates()
+          setErrorMessage('')
+        }}
         >GO</button>
       </form>
       <div>
-        {coordinates.status === "ZERO_RESULTS" && (
-          <p>Please refine your search terms...</p>
+        {errorMessage === "ZERO_RESULTS" || errorMessage === "NOT_FOUND" ? <p>Please refine your search terms...</p> : ''}
+        {parks.status === "ZERO_RESULTS" && (
+          <p>There are no parks within {radius}m of the mid-point</p>
         )}
         {loading ? <p>'loading...'</p> : parks.data && parks.data.results &&
         <ul>
