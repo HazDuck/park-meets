@@ -66,27 +66,36 @@ export const App = () => {
       <div className="title-container">
         <div className="title-container-inner">
           <h1>ParkMeets</h1>
-          <h3>Give ParkMeets two addesses and we will find you parks and outdoor spaces in the middle to meet at</h3>
+          <p>Give ParkMeets two addesses and we will find you parks and outdoor spaces in the middle to meet at</p>
         </div>
       </div>
       <div className="inputs-container">
+        <label
+        for="address1"
+        >First address:</label>
         <input
+          id="address1"
           type="text"
           value={address1}
           onChange={e => setAddress1(e.target.value)}
-          placeholder="Address 1"
         ></input>
+        <label
+        for="radius"
+        >Radius from center(m):</label>
         <input
+          id="radius"
           type="text"
           value={radius}
           onChange={e => setRadius(e.target.value)}
-          placeholder="Search Radius (m)"
         ></input>
+        <label
+        for="address2"
+        >Second address:</label>
         <input
+          id="address2"
           type="text"
           value={address2}
           onChange={e => setAddress2(e.target.value)}
-          placeholder="Address 2"
         ></input>
         <button
         type="button"

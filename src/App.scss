@@ -101,6 +101,13 @@ $breakpoints: (
   background-size: cover;
   height: 100vh;
   padding: 16px;
+
+  input {
+    border-radius: 4px;
+    padding: 4px;
+    border: 2px solid white;
+    margin: 8px;
+  }
 }
 
 .title-container {
@@ -110,15 +117,19 @@ $breakpoints: (
     h1 {
       text-align: center;
       font-size: 38px;
-  
+      color: #FFF;
+      margin-bottom: 8px;
+      
       @include media-query($medium) {
         text-align: right;
       }
     }
-  
+    
     p {
       text-align: center;
       font-weight: 100;
+      color: #FFF;
+      margin-bottom: 8px;
   
       @include media-query($medium) {
         text-align: right;
@@ -135,6 +146,10 @@ $breakpoints: (
 
   @include media-query($medium) {
     flex-direction: row;
+  }
+
+  label {
+    color: #FFF;
   }
 }
 
