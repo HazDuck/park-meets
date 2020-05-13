@@ -93,8 +93,37 @@ $breakpoints: (
   $small '(min-width: #{$small-breakpoint - 1})'
 );
 
-body {
-  background: #00CCFF;
+.app-container {
+  background-image: linear-gradient(#00CCFF, #a2ecff);
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: 'Roboto', sans-serif;
+  background-size: cover;
+  height: 100vh;
+}
+
+.title-container {
+  .title-container-inner {
+    width: fit-content;
+    margin: 0 auto;
+    h1 {
+      text-align: center;
+      font-size: 38px;
+  
+      @include media-query($medium) {
+        text-align: right;
+      }
+    }
+  
+    p {
+      text-align: center;
+      font-weight: 100;
+  
+      @include media-query($medium) {
+        text-align: right;
+      }
+    }
+  }
 }
 
 .inputs-container {

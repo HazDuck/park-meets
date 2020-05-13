@@ -61,10 +61,12 @@ export const App = () => {
   }
 
   return (
-    <>
+    <div className="app-container">
       <div className="title-container">
-        <h1>ParkMeets</h1>
-        <h3>Give ParkMeets two addesses and we will find you parks and outdoor spaces in the middle to meet at</h3>
+        <div className="title-container-inner">
+          <h1>ParkMeets</h1>
+          <h3>Give ParkMeets two addesses and we will find you parks and outdoor spaces in the middle to meet at</h3>
+        </div>
       </div>
       <div className="inputs-container">
         <input
@@ -121,6 +123,6 @@ export const App = () => {
           }
         </div>
       </div>
-    </>
+    </div>
   );
 }
