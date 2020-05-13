@@ -62,6 +62,7 @@ export const App = () => {
 
   return (
     <div className="app-container">
+      <div className="image phone"><div className="inner"><img src="/images/screen.png" alt="screen" /></div></div>
       <div className="title-container">
         <div className="title-container-inner">
           <h1>ParkMeets</h1>
