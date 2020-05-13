@@ -20,7 +20,7 @@ export const App = () => {
       })
     } 
     catch(error) {
-      setErrorMessage(error)
+      setErrorMessage('404')
       setLoading(false)
     } 
   }
@@ -43,18 +43,22 @@ export const App = () => {
   }
 
   const getParks = async (centralLocation) => {
-    let apiResponse
     try {
-      apiResponse = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${centralLocation.lat},${centralLocation.lng}&radius=${radius}&type=park&key=${process.env.REACT_APP_API_KEY}`)
-      setParks({data: apiResponse.data, status: apiResponse && apiResponse.data && apiResponse.data.status ? apiResponse.data.status : 'fail'})
-      setLoading(false)
+      await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${centralLocation.lat},${centralLocation.lng}&radius=${radius}&type=park&key=${process.env.REACT_APP_API_KEY}`)
+      .then(apiResponse => {
+        if (apiResponse.data.status === "INVALID_REQUEST") {
+          setErrorMessage(apiResponse.data.status)
+          setLoading(false)
+        } else {
+          setParks({data: apiResponse.data, status: apiResponse && apiResponse.data && apiResponse.data.status ? apiResponse.data.status : 'fail'})
+          setLoading(false)
+        }
+      }) 
     } 
     catch(error) {
       console.log(error)
     }
   }
-
-  console.log(parks)
 
   return (
     <div className="inputs-container">
@@ -90,10 +94,16 @@ export const App = () => {
         >GO</button>
       </form>
       <div>
-        {errorMessage === "ZERO_RESULTS" || errorMessage === "NOT_FOUND" ? <p>Please refine your search terms...</p> : ''}
+        {errorMessage === "ZERO_RESULTS" ? 
+        <p>Please refine your search terms...</p> : errorMessage === "404" ?
+        <p>Something went wrong..sorry</p> : errorMessage === "NOT_FOUND" ?
+        <p>Please refine your search terms...</p> : errorMessage === "INVALID_REQUEST" ? 
+        <p>Something went wrong...sorry</p> : ''}
+
         {parks.status === "ZERO_RESULTS" && (
           <p>There are no parks within {radius}m of the mid-point</p>
         )}
+
         {loading ? <p>'loading...'</p> : parks.data && parks.data.results &&
         <ul>
           {parks.data.results.map(park => 
@@ -107,7 +117,6 @@ export const App = () => {
         </ul>
         }
       </div>
-
     </div>
   );
 }
