@@ -102,11 +102,24 @@ $breakpoints: (
   height: 100vh;
   padding: 16px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  flex-direction: column;
+
+  @include media-query($medium) {
+    align-items: center;
+  }
+
+  @include media-query($large) {
+    flex-direction: row;
+  }
 }
 .main-container {
-  margin-right: 50px;
+  margin-right: 0px;
+
+  @include media-query($large) {
+    margin-right: 50px;
+  }
 
   .title-container {
     margin-bottom: 24px;
@@ -118,7 +131,7 @@ $breakpoints: (
         color: #FFF;
         margin-bottom: 8px;
         
-        @include media-query($medium) {
+        @include media-query($large) {
           text-align: right;
         }
       }
@@ -129,7 +142,7 @@ $breakpoints: (
         color: #FFF;
         font-size: 20px;
     
-        @include media-query($medium) {
+        @include media-query($large) {
           text-align: right;
         }
       }
@@ -142,9 +155,10 @@ $breakpoints: (
     align-items: center;
     justify-content: center;
   
-    @include media-query($medium) {
+    @include media-query($large) {
       flex-direction: row;
       justify-content: flex-end;
+      flex-wrap: wrap;
     }
 
     ::placeholder {
@@ -164,7 +178,7 @@ $breakpoints: (
   
     input {
       border-radius: 4px;
-      padding: 4px;
+      padding: 6px;
       border: 2px solid #FFF;
       margin: 8px;
       background-color: #a2ecff;
@@ -179,7 +193,7 @@ $breakpoints: (
   
     button {
       border-radius: 4px;
-      padding: 4px 12px;
+      padding: 6px 12px;
       border: 2px solid #FFF;
       margin: 8px 0 8px 8px;
       background-color: #FFF;
@@ -200,8 +214,13 @@ $breakpoints: (
   &.phone {
     box-shadow: none;
     border-radius: 0;
-    margin: 0 0 0 0;
+    margin: 0 auto;
     width: 13em;
+
+    @include media-query($medium) {
+      margin: 0 0 0 0;
+    }
+
 
     img {
       border-radius: 0;
