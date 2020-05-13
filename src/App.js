@@ -62,37 +62,35 @@ export const App = () => {
 
   return (
     <div className="inputs-container">
-      <form>
-        <input
-          type="text"
-          value={address1}
-          onChange={e => setAddress1(e.target.value)}
-          placeholder="Address 1"
-        ></input>
-        <input
-          type="text"
-          value={radius}
-          onChange={e => setRadius(e.target.value)}
-          placeholder="Search Radius (m)"
-        ></input>
-        <input
-          type="text"
-          value={address2}
-          onChange={e => setAddress2(e.target.value)}
-          placeholder="Address 2"
-        ></input>
-        <button
-        type="button"
-        onClick={() => {
-          getCoordinates()
-          setErrorMessage('')
-        }}
-        onKeyDown={() => {
-          getCoordinates()
-          setErrorMessage('')
-        }}
-        >GO</button>
-      </form>
+      <input
+        type="text"
+        value={address1}
+        onChange={e => setAddress1(e.target.value)}
+        placeholder="Address 1"
+      ></input>
+      <input
+        type="text"
+        value={radius}
+        onChange={e => setRadius(e.target.value)}
+        placeholder="Search Radius (m)"
+      ></input>
+      <input
+        type="text"
+        value={address2}
+        onChange={e => setAddress2(e.target.value)}
+        placeholder="Address 2"
+      ></input>
+      <button
+      type="button"
+      onClick={() => {
+        getCoordinates()
+        setErrorMessage('')
+      }}
+      onKeyDown={() => {
+        getCoordinates()
+        setErrorMessage('')
+      }}
+      >Let's meet</button>
       <div>
         {errorMessage === "ZERO_RESULTS" ? 
         <p>Please refine your search terms...</p> : errorMessage === "404" ?
