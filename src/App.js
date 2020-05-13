@@ -9,6 +9,7 @@ export const App = () => {
   const [ parks, setParks ] = useState({})
   const [ errorMessage, setErrorMessage ] = useState('')
 
+  //get co ordinates of addresses
   const getCoordinates = async () => {
     setLoading(true)
     let apiResponse
@@ -25,12 +26,12 @@ export const App = () => {
     } 
   }
 
+  //find central location of addresses
   const calculateCentralLocation = (apiResponse) => {
     if (apiResponse.status !== "OK") {
       setErrorMessage(apiResponse.status)
       setLoading(false)
     }
-
     if (apiResponse && apiResponse.data && apiResponse.data.routes[0] && apiResponse.data.routes[0].legs[0]) {
       let centralLocation = {
         lat: (apiResponse.data.routes[0].legs[0].end_location.lat + apiResponse.data.routes[0].legs[0].start_location.lat)/2,
@@ -42,6 +43,7 @@ export const App = () => {
     }
   }
 
+  //find parks nearby
   const getParks = async (centralLocation) => {
     try {
       await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${centralLocation.lat},${centralLocation.lng}&radius=${radius}&type=park&key=${process.env.REACT_APP_API_KEY}`)
@@ -50,7 +52,10 @@ export const App = () => {
           setErrorMessage(apiResponse.data.status)
           setLoading(false)
         } else {
-          setParks({data: apiResponse.data, status: apiResponse && apiResponse.data && apiResponse.data.status ? apiResponse.data.status : 'fail'})
+          setParks({
+            data: apiResponse.data, 
+            status: apiResponse && apiResponse.data && apiResponse.data.status ? apiResponse.data.status : 'fail'
+          })
           setLoading(false)
         }
       }) 
@@ -59,6 +64,26 @@ export const App = () => {
       console.log(error)
     }
   }
+
+  console.log(parks)
+
+  // function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+  //   var R = 6371; // Radius of the earth in km
+  //   var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  //   var dLon = deg2rad(lon2-lon1); 
+  //   var a = 
+  //     Math.sin(dLat/2) * Math.sin(dLat/2) +
+  //     Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+  //     Math.sin(dLon/2) * Math.sin(dLon/2)
+  //     ; 
+  //   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  //   var d = R * c; // Distance in km
+  //   return d;
+  // }
+  
+  // function deg2rad(deg) {
+  //   return deg * (Math.PI/180)
+  // }
 
   return (
     <div className="app-container">
@@ -123,6 +148,7 @@ export const App = () => {
                   { park.vicinity &&  
                   `, ${park.vicinity}`
                   }
+                  <p>Rating: {park.rating !== undefined ? park.rating : "N/A"}</p>
                 </li>
               )}
             </ul>
