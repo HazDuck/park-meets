@@ -61,60 +61,66 @@ export const App = () => {
   }
 
   return (
-    <div className="inputs-container">
-      <input
-        type="text"
-        value={address1}
-        onChange={e => setAddress1(e.target.value)}
-        placeholder="Address 1"
-      ></input>
-      <input
-        type="text"
-        value={radius}
-        onChange={e => setRadius(e.target.value)}
-        placeholder="Search Radius (m)"
-      ></input>
-      <input
-        type="text"
-        value={address2}
-        onChange={e => setAddress2(e.target.value)}
-        placeholder="Address 2"
-      ></input>
-      <button
-      type="button"
-      onClick={() => {
-        getCoordinates()
-        setErrorMessage('')
-      }}
-      onKeyDown={() => {
-        getCoordinates()
-        setErrorMessage('')
-      }}
-      >Let's meet</button>
-      <div>
-        {errorMessage === "ZERO_RESULTS" ? 
-        <p>Please refine your search terms...</p> : errorMessage === "404" ?
-        <p>Something went wrong..sorry</p> : errorMessage === "NOT_FOUND" ?
-        <p>Please refine your search terms...</p> : errorMessage === "INVALID_REQUEST" ? 
-        <p>Something went wrong...sorry</p> : ''}
-
-        {parks.status === "ZERO_RESULTS" && (
-          <p>There are no parks within {radius}m of the mid-point</p>
-        )}
-
-        {loading ? <p>'loading...'</p> : parks.data && parks.data.results &&
-        <ul>
-          {parks.data.results.map(park => 
-            <li key={park.id}>
-              <a href={`https://www.google.com/maps/place/?q=place_id:${park.place_id}`} target="_blank">{park.name}</a>
-              { park.vicinity &&  
-              `, ${park.vicinity}`
-              }
-            </li>
-          )}
-        </ul>
-        }
+    <>
+      <div className="title-container">
+        <h1>ParkMeets</h1>
+        <h3>Give ParkMeets two addesses and we will find you parks and outdoor spaces in the middle to meet at</h3>
       </div>
-    </div>
+      <div className="inputs-container">
+        <input
+          type="text"
+          value={address1}
+          onChange={e => setAddress1(e.target.value)}
+          placeholder="Address 1"
+        ></input>
+        <input
+          type="text"
+          value={radius}
+          onChange={e => setRadius(e.target.value)}
+          placeholder="Search Radius (m)"
+        ></input>
+        <input
+          type="text"
+          value={address2}
+          onChange={e => setAddress2(e.target.value)}
+          placeholder="Address 2"
+        ></input>
+        <button
+        type="button"
+        onClick={() => {
+          getCoordinates()
+          setErrorMessage('')
+        }}
+        onKeyDown={() => {
+          getCoordinates()
+          setErrorMessage('')
+        }}
+        >Let's meet</button>
+        <div>
+          {errorMessage === "ZERO_RESULTS" ? 
+          <p>Please refine your search terms...</p> : errorMessage === "404" ?
+          <p>Something went wrong..sorry</p> : errorMessage === "NOT_FOUND" ?
+          <p>Please refine your search terms...</p> : errorMessage === "INVALID_REQUEST" ? 
+          <p>Something went wrong...sorry</p> : ''}
+
+          {parks.status === "ZERO_RESULTS" && (
+            <p>There are no parks within {radius}m of the mid-point</p>
+          )}
+
+          {loading ? <p>'loading...'</p> : parks.data && parks.data.results &&
+          <ul>
+            {parks.data.results.map(park => 
+              <li key={park.id}>
+                <a href={`https://www.google.com/maps/place/?q=place_id:${park.place_id}`} target="_blank">{park.name}</a>
+                { park.vicinity &&  
+                `, ${park.vicinity}`
+                }
+              </li>
+            )}
+          </ul>
+          }
+        </div>
+      </div>
+    </>
   );
 }
