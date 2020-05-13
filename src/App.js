@@ -4,7 +4,7 @@ import axios from 'axios'
 export const App = () => {
   const [ address1, setAddress1 ] = useState('')
   const [ address2, setAddress2 ] = useState('')
-  const [ radius, setRadius ] = useState(200)
+  const [ radius, setRadius ] = useState()
   const [ loading, setLoading ] = useState(false)
   const [ parks, setParks ] = useState({})
   const [ errorMessage, setErrorMessage ] = useState('')
@@ -78,18 +78,18 @@ export const App = () => {
             onChange={e => setAddress1(e.target.value)}
           ></input>
           <input
-            id="radius"
-            type="text"
-            value={radius}
-            placeholder="Radius"
-            onChange={e => setRadius(e.target.value)}
-          ></input>
-          <input
             id="address2"
             type="text"
             value={address2}
             onChange={e => setAddress2(e.target.value)}
             placeholder="Second address"
+          ></input>
+          <input
+            id="radius"
+            type="text"
+            value={radius}
+            placeholder="Search radius (m)"
+            onChange={e => setRadius(e.target.value)}
           ></input>
           <button
           type="button"
@@ -102,7 +102,9 @@ export const App = () => {
             setErrorMessage('')
           }}
           >Let's meet</button>
-          <div>
+          </div>
+          {parks.data && parks.data.results &&
+          <div className="parks-container">
             {errorMessage === "ZERO_RESULTS" ? 
             <p>Please refine your search terms...</p> : errorMessage === "404" ?
             <p>Something went wrong..sorry</p> : errorMessage === "NOT_FOUND" ?
@@ -125,8 +127,7 @@ export const App = () => {
               )}
             </ul>
             }
-          </div>
-        </div>
+          </div>}
       </div>
       <div className="image phone"><div className="inner"><img src="/images/screen.png" alt="screen" /></div></div>
     </div>

@@ -94,7 +94,7 @@ $breakpoints: (
 );
 
 .app-container {
-  background-image: linear-gradient(#00CCFF, #a2ecff);
+  background-image: linear-gradient(#4faceb, #a2ecff);
   background-position: center;
   background-repeat: no-repeat;
   font-family: 'Roboto', sans-serif;
@@ -162,17 +162,17 @@ $breakpoints: (
     }
 
     ::placeholder {
-      color: #FFF;
+      color: #4faceb;
       opacity: 0.75; /* Firefox */
     }
     
     :-ms-input-placeholder { /* Internet Explorer 10-11 */
-      color: #FFF;
+      color: #4faceb;
       opacity: 0.75;
     }
     
     ::-ms-input-placeholder { /* Microsoft Edge */
-      color: #FFF;
+      color: #4faceb;
       opacity: 0.75;
     }
   
@@ -181,8 +181,8 @@ $breakpoints: (
       padding: 6px;
       border: 2px solid #FFF;
       margin: 8px;
-      background-color: #a2ecff;
-      color: #FFF;
+      background-color: #FFF;
+      color: #4faceb;
       font-size: 20px;
     }
   
@@ -194,15 +194,33 @@ $breakpoints: (
     button {
       border-radius: 4px;
       padding: 6px 12px;
-      border: 2px solid #FFF;
+      border: 2px solid #4faceb;
       margin: 8px 0 8px 8px;
-      background-color: #FFF;
-      color: #a2ecff;
+      background-color: #4faceb;
+      color: #FFF;
       font-size: 20px;
     }
   }
 }
 
+.parks-container {
+  color: #4faceb;
+  background-color: #FFF;
+  border-radius: 4px;
+  padding: 16px;
+  margin-top: 24px;
+
+  ul {
+    list-style-type: none;
+
+    li {
+      margin: 10px 0;
+      a {
+        color: #4faceb;
+      }
+    }
+  }
+}
 
 .image {
   border-radius: _size(border-radius);
