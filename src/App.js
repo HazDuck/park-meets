@@ -62,77 +62,73 @@ export const App = () => {
 
   return (
     <div className="app-container">
-      <div className="image phone"><div className="inner"><img src="/images/screen.png" alt="screen" /></div></div>
-      <div className="title-container">
-        <div className="title-container-inner">
-          <h1>ParkMeets</h1>
-          <p>Give ParkMeets two addesses and we will find you parks and outdoor spaces in the middle to meet at</p>
+      <div className="main-container">
+        <div className="title-container">
+          <div className="title-container-inner">
+            <h1>ParkMeets</h1>
+            <p>Give ParkMeets two addesses and we will find you parks and outdoor spaces in the middle to meet at</p>
+          </div>
         </div>
-      </div>
-      <div className="inputs-container">
-        <label
-        for="address1"
-        >First address:</label>
-        <input
-          id="address1"
-          type="text"
-          value={address1}
-          onChange={e => setAddress1(e.target.value)}
-        ></input>
-        <label
-        for="radius"
-        >Radius from center(m):</label>
-        <input
-          id="radius"
-          type="text"
-          value={radius}
-          onChange={e => setRadius(e.target.value)}
-        ></input>
-        <label
-        for="address2"
-        >Second address:</label>
-        <input
-          id="address2"
-          type="text"
-          value={address2}
-          onChange={e => setAddress2(e.target.value)}
-        ></input>
-        <button
-        type="button"
-        onClick={() => {
-          getCoordinates()
-          setErrorMessage('')
-        }}
-        onKeyDown={() => {
-          getCoordinates()
-          setErrorMessage('')
-        }}
-        >Let's meet</button>
-        <div>
-          {errorMessage === "ZERO_RESULTS" ? 
-          <p>Please refine your search terms...</p> : errorMessage === "404" ?
-          <p>Something went wrong..sorry</p> : errorMessage === "NOT_FOUND" ?
-          <p>Please refine your search terms...</p> : errorMessage === "INVALID_REQUEST" ? 
-          <p>Something went wrong...sorry</p> : ''}
+        <div className="inputs-container">
+          <input
+            id="address1"
+            type="text"
+            value={address1}
+            placeholder="First address"
+            onChange={e => setAddress1(e.target.value)}
+          ></input>
+          <input
+            id="radius"
+            type="text"
+            value={radius}
+            placeholder="Radius"
+            onChange={e => setRadius(e.target.value)}
+          ></input>
+          <input
+            id="address2"
+            type="text"
+            value={address2}
+            onChange={e => setAddress2(e.target.value)}
+            placeholder="Second address"
+          ></input>
+          <button
+          type="button"
+          onClick={() => {
+            getCoordinates()
+            setErrorMessage('')
+          }}
+          onKeyDown={() => {
+            getCoordinates()
+            setErrorMessage('')
+          }}
+          >Let's meet</button>
+          <div>
+            {errorMessage === "ZERO_RESULTS" ? 
+            <p>Please refine your search terms...</p> : errorMessage === "404" ?
+            <p>Something went wrong..sorry</p> : errorMessage === "NOT_FOUND" ?
+            <p>Please refine your search terms...</p> : errorMessage === "INVALID_REQUEST" ? 
+            <p>Something went wrong...sorry</p> : ''}
 
-          {parks.status === "ZERO_RESULTS" && (
-            <p>There are no parks within {radius}m of the mid-point</p>
-          )}
-
-          {loading ? <p>'loading...'</p> : parks.data && parks.data.results &&
-          <ul>
-            {parks.data.results.map(park => 
-              <li key={park.id}>
-                <a href={`https://www.google.com/maps/place/?q=place_id:${park.place_id}`} target="_blank">{park.name}</a>
-                { park.vicinity &&  
-                `, ${park.vicinity}`
-                }
-              </li>
+            {parks.status === "ZERO_RESULTS" && (
+              <p>There are no parks within {radius}m of the mid-point</p>
             )}
-          </ul>
-          }
+
+            {loading ? <p>'loading...'</p> : parks.data && parks.data.results &&
+            <ul>
+              {parks.data.results.map(park => 
+                <li key={park.id}>
+                  <a href={`https://www.google.com/maps/place/?q=place_id:${park.place_id}`} target="_blank">{park.name}</a>
+                  { park.vicinity &&  
+                  `, ${park.vicinity}`
+                  }
+                </li>
+              )}
+            </ul>
+            }
+          </div>
         </div>
       </div>
+      <div className="image phone"><div className="inner"><img src="/images/screen.png" alt="screen" /></div></div>
     </div>
   );
 }

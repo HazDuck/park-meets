@@ -101,73 +101,94 @@ $breakpoints: (
   background-size: cover;
   height: 100vh;
   padding: 16px;
-}
-
-.title-container {
-  margin-bottom: 24px;
-
-  .title-container-inner {
-    width: fit-content;
-    margin: 0 auto;
-    h1 {
-      text-align: center;
-      font-size: 50px;
-      color: #FFF;
-      margin-bottom: 8px;
-      
-      @include media-query($medium) {
-        text-align: right;
-      }
-    }
-    
-    p {
-      text-align: center;
-      font-weight: 100;
-      color: #FFF;
-      font-size: 20px;
-  
-      @include media-query($medium) {
-        text-align: right;
-      }
-    }
-  }
-}
-
-.inputs-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+.main-container {
+  margin-right: 50px;
 
-  @include media-query($medium) {
-    flex-direction: row;
+  .title-container {
+    margin-bottom: 24px;
+  
+    .title-container-inner {
+      h1 {
+        text-align: center;
+        font-size: 50px;
+        color: #FFF;
+        margin-bottom: 8px;
+        
+        @include media-query($medium) {
+          text-align: right;
+        }
+      }
+      
+      p {
+        text-align: center;
+        font-weight: 100;
+        color: #FFF;
+        font-size: 20px;
+    
+        @include media-query($medium) {
+          text-align: right;
+        }
+      }
+    }
   }
+  
+  .inputs-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  
+    @include media-query($medium) {
+      flex-direction: row;
+      justify-content: flex-end;
+    }
 
-  input {
-    border-radius: 4px;
-    padding: 4px;
-    border: 2px solid #FFF;
-    margin: 8px;
-    background-color: #a2ecff;
-    color: #FFF;
-    font-size: 20px;
-  }
-
-  label {
-    color: #FFF;
-    font-size: 20px;
-  }
-
-  button {
-    border-radius: 4px;
-    padding: 4px 12px;
-    border: 2px solid #FFF;
-    margin: 8px;
-    background-color: #FFF;
-    color: #a2ecff;
-    font-size: 20px;
+    ::placeholder {
+      color: #FFF;
+      opacity: 0.75; /* Firefox */
+    }
+    
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+      color: #FFF;
+      opacity: 0.75;
+    }
+    
+    ::-ms-input-placeholder { /* Microsoft Edge */
+      color: #FFF;
+      opacity: 0.75;
+    }
+  
+    input {
+      border-radius: 4px;
+      padding: 4px;
+      border: 2px solid #FFF;
+      margin: 8px;
+      background-color: #a2ecff;
+      color: #FFF;
+      font-size: 20px;
+    }
+  
+    label {
+      color: #FFF;
+      font-size: 20px;
+    }
+  
+    button {
+      border-radius: 4px;
+      padding: 4px 12px;
+      border: 2px solid #FFF;
+      margin: 8px 0 8px 8px;
+      background-color: #FFF;
+      color: #a2ecff;
+      font-size: 20px;
+    }
   }
 }
+
 
 .image {
   border-radius: _size(border-radius);
