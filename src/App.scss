@@ -101,22 +101,17 @@ $breakpoints: (
   background-size: cover;
   height: 100vh;
   padding: 16px;
-
-  input {
-    border-radius: 4px;
-    padding: 4px;
-    border: 2px solid white;
-    margin: 8px;
-  }
 }
 
 .title-container {
+  margin-bottom: 24px;
+
   .title-container-inner {
     width: fit-content;
     margin: 0 auto;
     h1 {
       text-align: center;
-      font-size: 38px;
+      font-size: 50px;
       color: #FFF;
       margin-bottom: 8px;
       
@@ -129,7 +124,7 @@ $breakpoints: (
       text-align: center;
       font-weight: 100;
       color: #FFF;
-      margin-bottom: 8px;
+      font-size: 20px;
   
       @include media-query($medium) {
         text-align: right;
@@ -148,8 +143,29 @@ $breakpoints: (
     flex-direction: row;
   }
 
+  input {
+    border-radius: 4px;
+    padding: 4px;
+    border: 2px solid #FFF;
+    margin: 8px;
+    background-color: #a2ecff;
+    color: #FFF;
+    font-size: 20px;
+  }
+
   label {
     color: #FFF;
+    font-size: 20px;
+  }
+
+  button {
+    border-radius: 4px;
+    padding: 4px 12px;
+    border: 2px solid #FFF;
+    margin: 8px;
+    background-color: #FFF;
+    color: #a2ecff;
+    font-size: 20px;
   }
 }
 
