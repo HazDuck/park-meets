@@ -124,13 +124,16 @@ export const App = () => {
             onChange={e => setAddress2(e.target.value)}
             placeholder="Second address"
           ></input>
-          <input
-            id="radius"
-            type="text"
+          <select 
             value={radius}
-            placeholder="Search radius (m)"
+            id="cars"
             onChange={e => setRadius(e.target.value)}
-          ></input>
+            >
+              <option value="100">100m</option>
+              <option value="200">200m</option>
+              <option value="500">500m</option>
+              <option value="1000">1000m</option>
+          </select>
           <button
           type="button"
           onClick={() => {
@@ -154,27 +157,29 @@ export const App = () => {
           </div>}
           {parks.data && parks.data.results &&
           <div className="parks-container">
-            {parks.status === "ZERO_RESULTS" && (
-              <p>There are no parks within {radius}m of the mid-point</p>
-            )}
-
-            {loading ? <p>'loading...'</p> : parks.data && parks.data.results &&
-            <ul>
-              {parks.data.results.map(park => 
-                <li key={park.id}>
-                  <a href={`https://www.google.com/maps/place/?q=place_id:${park.place_id}`} target="_blank">{park.name}</a>
-                  { park.vicinity &&  
-                  `, ${park.vicinity}`
-                  }
-                  <p>Rating: {park.rating !== undefined ? park.rating : "N/A"}</p>
-                  <div>
-                    <p>Distance to First Address: {park.distancetoAddress1.toFixed(2)}</p>
-                    <p>Distance to Second Address: {park.distancetoAddress2.toFixed(2)}</p>
-                  </div>
-                </li>
+            <div>
+              {parks.status === "ZERO_RESULTS" && (
+                <p>There are no parks within {radius}m of the mid-point</p>
               )}
-            </ul>
-            }
+
+              {loading ? <p>'loading...'</p> : parks.data && parks.data.results &&
+              <ul>
+                {parks.data.results.map(park => 
+                  <li key={park.id}>
+                    <a href={`https://www.google.com/maps/place/?q=place_id:${park.place_id}`} target="_blank">{park.name}</a>
+                    { park.vicinity &&  
+                    `, ${park.vicinity}`
+                    }
+                    <p>Rating: {park.rating !== undefined ? park.rating : "N/A"}</p>
+                    <div>
+                      <p>Distance to First Address: {park.distancetoAddress1.toFixed(2)}</p>
+                      <p>Distance to Second Address: {park.distancetoAddress2.toFixed(2)}</p>
+                    </div>
+                  </li>
+                )}
+              </ul>
+              }
+            </div>
           </div>}
       </div>
       <div className="image phone"><div className="inner"><img src="/images/screen.png" alt="screen" /></div></div>
