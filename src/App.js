@@ -4,7 +4,7 @@ import axios from 'axios'
 export const App = () => {
   const [ address1, setAddress1 ] = useState('')
   const [ address2, setAddress2 ] = useState('')
-  const [ radius, setRadius ] = useState()
+  const [ radius, setRadius ] = useState(200)
   const [ loading, setLoading ] = useState(false)
   const [ parks, setParks ] = useState({})
   const [ errorMessage, setErrorMessage ] = useState('')
@@ -33,25 +33,39 @@ export const App = () => {
       setLoading(false)
     }
     if (apiResponse && apiResponse.data && apiResponse.data.routes[0] && apiResponse.data.routes[0].legs[0]) {
-      let centralLocation = {
-        lat: (apiResponse.data.routes[0].legs[0].end_location.lat + apiResponse.data.routes[0].legs[0].start_location.lat)/2,
-        lng: (apiResponse.data.routes[0].legs[0].end_location.lng + apiResponse.data.routes[0].legs[0].start_location.lng)/2
+      let locations = {
+        address1Coordinates: {
+          lat: apiResponse.data.routes[0].legs[0].start_location.lat,
+          lng: apiResponse.data.routes[0].legs[0].start_location.lng
+        },
+        address2Coordinates: {
+          lat: apiResponse.data.routes[0].legs[0].end_location.lat,
+          lng: apiResponse.data.routes[0].legs[0].end_location.lng
+        },
+        centralLat: (apiResponse.data.routes[0].legs[0].end_location.lat + apiResponse.data.routes[0].legs[0].start_location.lat)/2,
+        centralLng: (apiResponse.data.routes[0].legs[0].end_location.lng + apiResponse.data.routes[0].legs[0].start_location.lng)/2
       }
-      if (centralLocation.lat !== undefined && centralLocation.lng !== undefined ) {
-        getParks(centralLocation)
+      if (locations.centralLat !== undefined && locations.centralLng !== undefined ) {
+        getParks(locations)
       }
     }
   }
 
   //find parks nearby
-  const getParks = async (centralLocation) => {
+  const getParks = async (locations) => {
     try {
-      await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${centralLocation.lat},${centralLocation.lng}&radius=${radius}&type=park&key=${process.env.REACT_APP_API_KEY}`)
+      await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${locations.centralLat},${locations.centralLng}&radius=${radius}&type=park&key=${process.env.REACT_APP_API_KEY}`)
       .then(apiResponse => {
         if (apiResponse.data.status === "INVALID_REQUEST") {
           setErrorMessage(apiResponse.data.status)
           setLoading(false)
         } else {
+          console.log(apiResponse, 'apiResponse')
+          apiResponse.data.results.map(park => {
+            park.distancetoAddress1 = getDistanceFromLatLonInKm(park.geometry.location.lat, park.geometry.location.lng, locations.address1Coordinates.lat, locations.address1Coordinates.lng)
+            park.distancetoAddress2 = getDistanceFromLatLonInKm(park.geometry.location.lat, park.geometry.location.lng, locations.address2Coordinates.lat, locations.address2Coordinates.lng)
+          })
+
           setParks({
             data: apiResponse.data, 
             status: apiResponse && apiResponse.data && apiResponse.data.status ? apiResponse.data.status : 'fail'
@@ -65,25 +79,26 @@ export const App = () => {
     }
   }
 
-  console.log(parks)
-
-  // function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
-  //   var R = 6371; // Radius of the earth in km
-  //   var dLat = deg2rad(lat2-lat1);  // deg2rad below
-  //   var dLon = deg2rad(lon2-lon1); 
-  //   var a = 
-  //     Math.sin(dLat/2) * Math.sin(dLat/2) +
-  //     Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
-  //     Math.sin(dLon/2) * Math.sin(dLon/2)
-  //     ; 
-  //   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-  //   var d = R * c; // Distance in km
-  //   return d;
-  // }
+  function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = deg2rad(lat2-lat1);  // deg2rad below
+    var dLon = deg2rad(lon2-lon1); 
+    var a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2)
+      ; 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c; // Distance in km
+    return d;
+  }
   
-  // function deg2rad(deg) {
-  //   return deg * (Math.PI/180)
-  // }
+  function deg2rad(deg) {
+    return deg * (Math.PI/180)
+  }
+
+  console.log(errorMessage)
+  console.log(parks)
 
   return (
     <div className="app-container">
@@ -121,21 +136,24 @@ export const App = () => {
           onClick={() => {
             getCoordinates()
             setErrorMessage('')
+            setParks({})
           }}
           onKeyDown={() => {
             getCoordinates()
             setErrorMessage('')
+            setParks({})
           }}
           >Let's meet</button>
           </div>
-          {parks.data && parks.data.results &&
-          <div className="parks-container">
+          {errorMessage !== '' && <div className="error-message">
             {errorMessage === "ZERO_RESULTS" ? 
             <p>Please refine your search terms...</p> : errorMessage === "404" ?
             <p>Something went wrong..sorry</p> : errorMessage === "NOT_FOUND" ?
             <p>Please refine your search terms...</p> : errorMessage === "INVALID_REQUEST" ? 
             <p>Something went wrong...sorry</p> : ''}
-
+          </div>}
+          {parks.data && parks.data.results &&
+          <div className="parks-container">
             {parks.status === "ZERO_RESULTS" && (
               <p>There are no parks within {radius}m of the mid-point</p>
             )}
@@ -149,6 +167,10 @@ export const App = () => {
                   `, ${park.vicinity}`
                   }
                   <p>Rating: {park.rating !== undefined ? park.rating : "N/A"}</p>
+                  <div>
+                    <p>Distance to First Address: {park.distancetoAddress1.toFixed(2)}</p>
+                    <p>Distance to Second Address: {park.distancetoAddress2.toFixed(2)}</p>
+                  </div>
                 </li>
               )}
             </ul>
