@@ -14,7 +14,7 @@ export const App = () => {
     setLoading(true)
     let apiResponse
     try {
-      await axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=”${address1}”&destination=”${address2}”&key=${process.env.REACT_APP_API_KEY}`)
+      await axios.get(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=”${address1}”&destination=”${address2}”&key=${process.env.REACT_APP_API_KEY}`)
       .then(data => {
         apiResponse = {data: data.data, status: data.data.status}
         calculateCentralLocation(apiResponse)
@@ -28,6 +28,7 @@ export const App = () => {
 
   //find central location of addresses
   const calculateCentralLocation = (apiResponse) => {
+    console.log(apiResponse)
     if (apiResponse.status !== "OK") {
       setErrorMessage(apiResponse.status)
       setLoading(false)
@@ -54,7 +55,7 @@ export const App = () => {
   //find parks nearby
   const getParks = async (locations) => {
     try {
-      await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${locations.centralLat},${locations.centralLng}&radius=${radius}&type=park&key=${process.env.REACT_APP_API_KEY}`)
+      await axios.get(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${locations.centralLat},${locations.centralLng}&radius=${radius}&type=park&key=${process.env.REACT_APP_API_KEY}`)
       .then(apiResponse => {
         if (apiResponse.data.status === "INVALID_REQUEST") {
           setErrorMessage(apiResponse.data.status)
@@ -95,6 +96,9 @@ export const App = () => {
   function deg2rad(deg) {
     return deg * (Math.PI/180)
   }
+
+  console.log(parks, 'parks')
+  console.log(errorMessage, 'errorMessage')
 
   return (
     <div className="app-container">
