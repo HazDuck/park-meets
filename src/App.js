@@ -60,7 +60,6 @@ export const App = () => {
           setErrorMessage(apiResponse.data.status)
           setLoading(false)
         } else {
-          console.log(apiResponse, 'apiResponse')
           apiResponse.data.results.map(park => {
             park.distancetoAddress1 = getDistanceFromLatLonInKm(park.geometry.location.lat, park.geometry.location.lng, locations.address1Coordinates.lat, locations.address1Coordinates.lng)
             park.distancetoAddress2 = getDistanceFromLatLonInKm(park.geometry.location.lat, park.geometry.location.lng, locations.address2Coordinates.lat, locations.address2Coordinates.lng)
@@ -96,9 +95,6 @@ export const App = () => {
   function deg2rad(deg) {
     return deg * (Math.PI/180)
   }
-
-  console.log(errorMessage)
-  console.log(parks)
 
   return (
     <div className="app-container">
