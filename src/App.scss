@@ -99,7 +99,7 @@ $breakpoints: (
   background-repeat: no-repeat;
   font-family: 'Roboto', sans-serif;
   background-size: cover;
-  height: 100vh;
+  min-height: 100vh;
   padding: 16px;
   display: flex;
   align-items: flex-start;
@@ -221,7 +221,7 @@ $breakpoints: (
   background-color: #FFF;
   border-radius: 4px;
   padding: 16px;
-  margin-top: 24px;
+  margin: 24px 0;
   max-height: 400px;
   overflow: auto;
 

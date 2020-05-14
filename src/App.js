@@ -172,8 +172,8 @@ export const App = () => {
                     }
                     <p>Rating: {park.rating !== undefined ? park.rating : "N/A"}</p>
                     <div>
-                      <p>Distance to First Address: {park.distancetoAddress1.toFixed(2)}</p>
-                      <p>Distance to Second Address: {park.distancetoAddress2.toFixed(2)}</p>
+                      <p>Distance to First Address: {park.distancetoAddress1.toFixed(2)}km</p>
+                      <p>Distance to Second Address: {park.distancetoAddress2.toFixed(2)}km</p>
                     </div>
                   </li>
                 )}
