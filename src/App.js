@@ -28,7 +28,6 @@ export const App = () => {
 
   //find central location of addresses
   const calculateCentralLocation = (apiResponse) => {
-    console.log(apiResponse)
     if (apiResponse.status !== "OK") {
       setErrorMessage(apiResponse.status)
       setLoading(false)
