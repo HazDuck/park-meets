@@ -97,10 +97,6 @@ export const App = () => {
     return deg * (Math.PI/180)
   }
 
-  console.log(parks, 'parks')
-  console.log(errorMessage, 'errorMessage')
-  console.log(process.env.REACT_APP_API_KEY)
-
   return (
     <div className="app-container">
       <div className="main-container">
